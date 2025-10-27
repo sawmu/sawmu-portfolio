@@ -1,8 +1,8 @@
-// import Link from "next/link";
+import Link from "next/link";
 import { defineQuery } from "next-sanity";
-// import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
-// import { LayoutTextFlip } from "@/components/ui/layout-text-flip";
-// import { urlFor } from "@/sanity/lib/image";
+import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+import { LayoutTextFlip } from "@/components/ui/layout-text-flip";
+import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
 // import { ProfileImage } from "./ProfileImage";
 
@@ -34,7 +34,15 @@ async function HeroSection() {
 
 
   return (
-    <div>HeroSection</div>
+       <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center px-6 py-20 overflow-hidden"
+    >
+      {/* Background Ripple Effect */}
+      <BackgroundRippleEffect rows={8} cols={27} cellSize={56} />
+
+    
+    </section>
   )
 }
 
