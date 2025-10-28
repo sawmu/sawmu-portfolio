@@ -1,3 +1,4 @@
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import Image from "next/image";
 import Link from "next/link";
 import { defineQuery } from "next-sanity";
@@ -16,10 +17,28 @@ const PROJECTS_QUERY =
   technologies[]->{name, category, color}
 }`);
 
-export async function ProjectsSection() {
-  const { data: projects } = await sanityFetch({ query: PROJECTS_QUERY });
+type ProjectTechnology = {
+  name?: string | null;
+  category?: string | null;
+  color?: string | null;
+} | null;
 
-  if (!projects || projects.length === 0) {
+type Project = {
+  title?: string | null;
+  slug?: { current?: string | null } | null;
+  tagline?: string | null;
+  category?: string | null;
+  liveUrl?: string | null;
+  githubUrl?: string | null;
+  coverImage?: SanityImageSource | null;
+  technologies?: ProjectTechnology[] | null;
+};
+
+export async function ProjectsSection() {
+  const { data } = await sanityFetch({ query: PROJECTS_QUERY });
+  const projects: Project[] = Array.isArray(data) ? (data as Project[]) : [];
+
+  if (projects.length === 0) {
     return null;
   }
 
@@ -35,7 +54,7 @@ export async function ProjectsSection() {
 
         <div className="@container">
           <div className="grid grid-cols-1 @2xl:grid-cols-2 @5xl:grid-cols-3 gap-8">
-            {projects.map((project) => (
+            {projects.map((project: Project) => (
               <div
                 key={project.slug?.current}
                 className="@container/card group bg-card border rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300"
