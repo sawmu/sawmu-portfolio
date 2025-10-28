@@ -58,11 +58,7 @@ export async function ServicesSection() {
     return null;
   }
 
-  const formatPrice = (pricing: {
-    startingPrice?: number;
-    priceType?: string;
-    description?: string;
-  }) => {
+  const formatPrice = (pricing: ServicePricing) => {
     if (!pricing) return null;
 
     const { startingPrice, priceType, description } = pricing;
@@ -80,7 +76,7 @@ export async function ServicesSection() {
 
     return (
       <div>
-        {startingPrice && (
+        {typeof startingPrice === "number" && (
           <span className="text-2xl font-bold text-primary">
             ${startingPrice.toLocaleString()}
             {priceType && priceTypeLabels[priceType]}
