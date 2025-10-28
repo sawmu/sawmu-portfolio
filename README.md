@@ -124,6 +124,31 @@ git push origin main
 
 Then connect your GitHub repo to [Vercel](https://vercel.com/new) — it will auto-detect your Next.js app.
 
+### 🔄 Automated CI/CD (GitHub → Vercel)
+
+This repo ships with a GitHub Actions workflow (`.github/workflows/ci-cd.yml`) that:
+
+1. Installs dependencies and runs `npm run lint` + `npm run build` on every push / PR.
+2. Deploys to Vercel automatically when the `main` branch passes checks.
+
+To enable it:
+
+1. **Create / link your project on Vercel** and note the following values:
+   - `VERCEL_TOKEN` – create in **Account Settings → Tokens**
+   - `VERCEL_ORG_ID` – found in the project settings URL (`/dashboard/<org-id>/...`)
+   - `VERCEL_PROJECT_ID` – in the project’s **Settings → General**
+2. **Add GitHub repository secrets** (Settings → Secrets → Actions):
+   - `VERCEL_TOKEN`
+   - `VERCEL_ORG_ID`
+   - `VERCEL_PROJECT_ID`
+3. **Mirror your environment variables on Vercel** (Project → Settings → Environment Variables) so production builds have Clerk, Sanity, and OpenAI keys.
+
+Once the secrets are in place, pushes to `main` will:
+
+- Validate the code (Biome + `next build`)
+- Run a production `vercel build`
+- Publish with `vercel deploy --prebuilt --prod`
+
 ---
 
 ## 📚 Resources
