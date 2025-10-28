@@ -1,3 +1,4 @@
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { IconExternalLink } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,12 +21,33 @@ const CERTIFICATIONS_QUERY =
   order
 }`);
 
+type CertificationSkill = {
+  name?: string | null;
+  category?: string | null;
+} | null;
+
+type Certification = {
+  name?: string | null;
+  issuer?: string | null;
+  issueDate?: string | null;
+  expiryDate?: string | null;
+  credentialId?: string | null;
+  credentialUrl?: string | null;
+  logo?: SanityImageSource | null;
+  description?: string | null;
+  skills?: CertificationSkill[] | null;
+  order?: number | null;
+};
+
 export async function CertificationsSection() {
-  const { data: certifications } = await sanityFetch({
+  const { data } = await sanityFetch({
     query: CERTIFICATIONS_QUERY,
   });
+  const certifications: Certification[] = Array.isArray(data)
+    ? (data as Certification[])
+    : [];
 
-  if (!certifications || certifications.length === 0) {
+  if (certifications.length === 0) {
     return null;
   }
 
@@ -59,7 +81,7 @@ export async function CertificationsSection() {
 
         <div className="@container">
           <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-10">
-            {certifications.map((cert) => (
+            {certifications.map((cert: Certification) => (
               <CometCard
                 key={`${cert.issuer}-${cert.name}-${cert.issueDate}`}
                 rotateDepth={8}
