@@ -5,6 +5,18 @@ import { defineQuery } from "next-sanity";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
 
+type Achievement = {
+  title?: string | null;
+  type?: string | null;
+  issuer?: string | null;
+  date?: string | null;
+  description?: string | null;
+  image?: unknown;
+  url?: string | null;
+  featured?: boolean | null;
+  order?: number | null;
+};
+
 const ACHIEVEMENTS_QUERY =
   defineQuery(`*[_type == "achievement"] | order(date desc){
   title,
@@ -19,11 +31,12 @@ const ACHIEVEMENTS_QUERY =
 }`);
 
 export async function AchievementsSection() {
-  const { data: achievements } = await sanityFetch({
+  const { data } = await sanityFetch({
     query: ACHIEVEMENTS_QUERY,
   });
+  const achievements = (data ?? []) as Achievement[];
 
-  if (!achievements || achievements.length === 0) {
+  if (achievements.length === 0) {
     return null;
   }
 
