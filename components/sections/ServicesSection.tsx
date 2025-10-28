@@ -1,7 +1,9 @@
 import { PortableText } from "@portabletext/react";
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { IconCheck } from "@tabler/icons-react";
 import { Star } from "lucide-react";
 import Image from "next/image";
+import type { PortableTextBlock } from "next-sanity";
 import { defineQuery } from "next-sanity";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
@@ -22,10 +24,37 @@ const SERVICES_QUERY =
   order
 }`);
 
-export async function ServicesSection() {
-  const { data: services } = await sanityFetch({ query: SERVICES_QUERY });
+type ServiceTechnology = {
+  name?: string | null;
+  category?: string | null;
+} | null;
 
-  if (!services || services.length === 0) {
+type ServicePricing = {
+  startingPrice?: number | null;
+  priceType?: string | null;
+  description?: string | null;
+} | null;
+
+type Service = {
+  title?: string | null;
+  slug?: { current?: string | null } | null;
+  icon?: SanityImageSource | null;
+  shortDescription?: string | null;
+  fullDescription?: PortableTextBlock[] | null;
+  features?: string[] | null;
+  technologies?: ServiceTechnology[] | null;
+  deliverables?: string[] | null;
+  pricing?: ServicePricing;
+  timeline?: string | null;
+  featured?: boolean | null;
+  order?: number | null;
+};
+
+export async function ServicesSection() {
+  const { data } = await sanityFetch({ query: SERVICES_QUERY });
+  const services: Service[] = Array.isArray(data) ? (data as Service[]) : [];
+
+  if (services.length === 0) {
     return null;
   }
 
