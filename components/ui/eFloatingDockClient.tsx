@@ -3,9 +3,9 @@
 import { useClerk, useUser } from "@clerk/nextjs";
 import { IconLogout, IconMenu2, IconX } from "@tabler/icons-react";
 import Link from "next/link";
-import { useState } from "react";
-import { DynamicIcon } from "./DynamicIcon";
-import { useSidebar } from "./ui/sidebar";
+import { type ReactNode, useState } from "react";
+import { DynamicIcon } from "../DynamicIcon";
+import { useSidebar } from "./sidebar";
 
 interface NavItem {
   title?: string | null;
@@ -21,7 +21,7 @@ interface FloatingDockClientProps {
 interface DockLink {
   title: string;
   href?: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   isExternal?: boolean | null;
   onClick?: () => void;
 }
