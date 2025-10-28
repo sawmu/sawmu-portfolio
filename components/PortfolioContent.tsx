@@ -1,5 +1,5 @@
 import { AboutSection } from "./sections/AboutSection";
-import { AchievementsSection } from "./sections/AchievementsSection";
+// import { AchievementsSection } from "./sections/AchievementsSection";
 // import { BlogSection } from "./sections/BlogSection";
 // import { CertificationsSection } from "./sections/CertificationsSection";
 import { ContactSection } from "./sections/ContactSection";
@@ -23,7 +23,7 @@ async function PortfolioContent() {
       <EducationSection />
     
       {/* <CertificationsSection /> */}
-      <AchievementsSection />
+      {/* <AchievementsSection /> */}
       {/* <ServicesSection /> */}
       {/* <BlogSection /> */}
       <ContactSection />
