@@ -1,3 +1,4 @@
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { IconExternalLink, IconStar } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,7 +12,7 @@ type Achievement = {
   issuer?: string | null;
   date?: string | null;
   description?: string | null;
-  image?: unknown;
+  image?: SanityImageSource | null;
   url?: string | null;
   featured?: boolean | null;
   order?: number | null;
@@ -34,7 +35,9 @@ export async function AchievementsSection() {
   const { data } = await sanityFetch({
     query: ACHIEVEMENTS_QUERY,
   });
-  const achievements = (data ?? []) as Achievement[];
+  const achievements: Achievement[] = Array.isArray(data)
+    ? (data as Achievement[])
+    : [];
 
   if (achievements.length === 0) {
     return null;
@@ -78,8 +81,12 @@ export async function AchievementsSection() {
   };
 
   // Separate featured and regular achievements
-  const featured = achievements.filter((a) => a.featured);
-  const regular = achievements.filter((a) => !a.featured);
+  const featured = achievements.filter((achievement: Achievement) =>
+    Boolean(achievement.featured),
+  );
+  const regular = achievements.filter(
+    (achievement: Achievement) => !achievement.featured,
+  );
 
   return (
     <section id="achievements" className="py-20 px-6 bg-muted/30">
