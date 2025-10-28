@@ -1,3 +1,4 @@
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { IconAward, IconCalendar, IconExternalLink } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,10 +22,28 @@ const EDUCATION_QUERY =
   order
 }`);
 
-export async function EducationSection() {
-  const { data: education } = await sanityFetch({ query: EDUCATION_QUERY });
+type EducationEntry = {
+  institution?: string | null;
+  degree?: string | null;
+  fieldOfStudy?: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  current?: boolean | null;
+  gpa?: string | null;
+  description?: string | null;
+  achievements?: string[] | null;
+  logo?: SanityImageSource | null;
+  website?: string | null;
+  order?: number | null;
+};
 
-  if (!education || education.length === 0) {
+export async function EducationSection() {
+  const { data } = await sanityFetch({ query: EDUCATION_QUERY });
+  const education: EducationEntry[] = Array.isArray(data)
+    ? (data as EducationEntry[])
+    : [];
+
+  if (education.length === 0) {
     return null;
   }
 
