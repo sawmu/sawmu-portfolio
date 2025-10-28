@@ -1,3 +1,4 @@
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import Image from "next/image";
 import Link from "next/link";
 import { defineQuery } from "next-sanity";
@@ -15,12 +16,24 @@ const BLOG_QUERY = defineQuery(`*[_type == "blog"] | order(publishedAt desc){
   featuredImage
 }`);
 
+type BlogPost = {
+  title?: string | null;
+  slug?: { current?: string | null } | null;
+  excerpt?: string | null;
+  category?: string | null;
+  tags?: string[] | null;
+  publishedAt?: string | null;
+  readTime?: number | null;
+  featuredImage?: SanityImageSource | null;
+};
+
 export async function BlogSection() {
-  const { data: posts } = await sanityFetch({
+  const { data } = await sanityFetch({
     query: BLOG_QUERY,
   });
+  const posts: BlogPost[] = Array.isArray(data) ? (data as BlogPost[]) : [];
 
-  if (!posts || posts.length === 0) {
+  if (posts.length === 0) {
     return null;
   }
 
