@@ -45,6 +45,12 @@ npm run dev
 ```
 Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### 5. Generate Sanity types (optional)
+Whenever you update your Sanity schema, regenerate the local TypeScript types:
+```bash
+npm run typegen
+```
+
 ---
 
 ## 🧠 Folder Structure
