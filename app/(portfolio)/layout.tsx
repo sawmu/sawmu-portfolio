@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../globals.css";
+import "@/app/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { SanityLive } from "@/sanity/lib/live";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import SidebarToggle from "@/components/SidebarToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,15 +29,30 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <SidebarProvider>
+            <SidebarInset>
+              {children}
+            </SidebarInset>
+            <AppSidebar side="right" />
 
-        <SanityLive />
-      </body>
-    </html>
+            {/* <FloatingDock /> */}
+            <SidebarToggle />
+             {/* Mode Toggle - Desktop: bottom right next to AI chat, Mobile: top right next to burger menu */}
+              {/* <div className="fixed md:bottom-6 md:right-24 top-4 right-18 md:top-auto md:left-auto z-20">
+                <div className="w-10 h-10 md:w-12 md:h-12">
+                  <ModeToggle />
+                </div>
+              </div> */}
+          </SidebarProvider>
+          
+
+          <SanityLive />
+        </body>
+      </html>
     </ClerkProvider>
   );
 }

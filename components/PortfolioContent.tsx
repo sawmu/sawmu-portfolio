@@ -1,12 +1,14 @@
-import HeroSection from "./sections/HeroSection"
+import HeroSection from "./sections/HeroSection";
+import { AboutSection } from "./sections/AboutSection"
 
 async function PortfolioContent() {
-  return <>
+  return (
+    <>
     <HeroSection />
-
-  </>
+    <AboutSection />
+    </>
+  );
   
-    
 }
 
-export default PortfolioContent
+export default PortfolioContent;

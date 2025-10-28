@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { defineQuery } from "next-sanity";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
-import { LayoutTextFlip } from "@/components/ui/layout-text-flip";
 import { urlFor } from "@/sanity/lib/image";
 import { sanityFetch } from "@/sanity/lib/live";
-// import { ProfileImage } from "./ProfileImage";
-
+import { LayoutTextFlip } from "@/components/ui/layout-text-flip";
+import { ProfileImage } from "@/components/ProfileImage";
 
 const HERO_QUERY = defineQuery(`*[_id == "singleton-profile"][0]{
   firstName,
@@ -25,16 +24,15 @@ const HERO_QUERY = defineQuery(`*[_id == "singleton-profile"][0]{
 }`);
 
 async function HeroSection() {
-  const { data: profile } = await sanityFetch({ query: HERO_QUERY});
+  const { data: profile } = await sanityFetch({ query: HERO_QUERY });
   // console.log(profile);
 
   if (!profile) {
     return null;
   }
 
-
   return (
-     <section
+    <section
       id="home"
       className="relative min-h-screen flex items-center justify-center px-6 py-20 overflow-hidden"
     >
@@ -53,13 +51,13 @@ async function HeroSection() {
               {profile.headlineStaticText &&
               profile.headlineAnimatedWords &&
               profile.headlineAnimatedWords.length > 0 ? (
-                <p>Hello Mu Ka hbaw Aye</p>
-                // <LayoutTextFlip
-                //   text={profile.headlineStaticText}
-                //   words={profile.headlineAnimatedWords}
-                //   duration={profile.headlineAnimationDuration || 3000}
-                //   className="text-xl @md/hero:text-2xl @lg/hero:text-3xl text-muted-foreground font-medium"
-                // />
+                
+                <LayoutTextFlip
+                  text={profile.headlineStaticText}
+                  words={profile.headlineAnimatedWords}
+                  duration={profile.headlineAnimationDuration || 3000}
+                  className="text-xl @md/hero:text-2xl @lg/hero:text-3xl text-muted-foreground font-medium"
+                />
               ) : (
                 <p className="text-xl @md/hero:text-2xl @lg/hero:text-3xl text-muted-foreground font-medium">
                   {profile.headline}
@@ -151,7 +149,7 @@ async function HeroSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default HeroSection
+export default HeroSection;
