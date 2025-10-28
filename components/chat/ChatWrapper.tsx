@@ -1,6 +1,7 @@
 import { defineQuery } from "next-sanity";
 import Chat from "@/components/chat/Chat";
 import { sanityFetch } from "@/sanity/lib/live";
+import type { CHAT_PROFILE_QUERYResult } from "@/sanity.types";
 import SidebarToggle from "../SidebarToggle";
 
 const CHAT_PROFILE_QUERY = defineQuery(`*[_id == "singleton-profile"][0]{
@@ -23,7 +24,9 @@ const CHAT_PROFILE_QUERY = defineQuery(`*[_id == "singleton-profile"][0]{
   }`);
 
 async function ChatWrapper() {
-  const { data: profile } = await sanityFetch({ query: CHAT_PROFILE_QUERY });
+  const { data: profile } = await sanityFetch<CHAT_PROFILE_QUERYResult>({
+    query: CHAT_PROFILE_QUERY,
+  });
 
   return (
     <div className="h-full w-full">
@@ -31,7 +34,7 @@ async function ChatWrapper() {
         <SidebarToggle />
       </div>
 
-      <Chat profile={profile} />
+      <Chat profile={profile ?? null} />
     </div>
   );
 }

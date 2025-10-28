@@ -17,7 +17,7 @@ export const BackgroundRippleEffect = ({
     col: number;
   } | null>(null);
   const [rippleKey, setRippleKey] = useState(0);
-  const ref = useRef<any>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   return (
     <div
@@ -111,10 +111,10 @@ const DivGrid = ({
           : {};
 
         return (
-          <div
+          <button
             key={idx}
             className={cn(
-              "cell relative border-[0.5px] opacity-40 transition-opacity duration-150 will-change-transform hover:opacity-80 dark:shadow-[0px_0px_40px_1px_var(--cell-shadow-color)_inset]",
+              "cell relative border-[0.5px] opacity-40 transition-opacity duration-150 will-change-transform appearance-none hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:shadow-[0px_0px_40px_1px_var(--cell-shadow-color)_inset]",
               clickedCell && "animate-cell-ripple [animation-fill-mode:none]",
               !interactive && "pointer-events-none",
             )}
@@ -123,9 +123,10 @@ const DivGrid = ({
               borderColor: borderColor,
               ...style,
             }}
-            onClick={
-              interactive ? () => onCellClick?.(rowIdx, colIdx) : undefined
-            }
+            type="button"
+            onClick={() => onCellClick?.(rowIdx, colIdx)}
+            disabled={!interactive}
+            aria-label={`Activate ripple at row ${rowIdx + 1}, column ${colIdx + 1}`}
           />
         );
       })}

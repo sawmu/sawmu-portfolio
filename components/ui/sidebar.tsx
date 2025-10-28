@@ -31,6 +31,15 @@ const SIDEBAR_WIDTH_MOBILE = "100%";
 const SIDEBAR_WIDTH_ICON = "3rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
+type CookieStoreLike = {
+  set: (details: {
+    name: string;
+    value: string;
+    expires?: number | Date;
+    path?: string;
+  }) => Promise<void>;
+};
+
 type SidebarContextProps = {
   state: "expanded" | "collapsed";
   open: boolean;
@@ -67,6 +76,30 @@ function SidebarProvider({
 }) {
   const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = React.useState(false);
+  const persistSidebarState = React.useCallback((openState: boolean) => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const cookieStore = (
+      window as typeof window & {
+        cookieStore?: CookieStoreLike;
+      }
+    ).cookieStore;
+
+    if (cookieStore?.set) {
+      void cookieStore.set({
+        name: SIDEBAR_COOKIE_NAME,
+        value: String(openState),
+        expires: Date.now() + SIDEBAR_COOKIE_MAX_AGE * 1000,
+        path: "/",
+      });
+      return;
+    }
+
+    // biome-ignore lint/suspicious/noDocumentCookie: Cookie Store API is not available in all supported browsers yet.
+    document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+  }, []);
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
@@ -82,9 +115,9 @@ function SidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+      persistSidebarState(openState);
     },
-    [setOpenProp, open],
+    [setOpenProp, open, persistSidebarState],
   );
 
   // Helper to toggle the sidebar.
