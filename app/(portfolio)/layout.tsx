@@ -8,6 +8,7 @@ import { urlFor } from "@/sanity/lib/image";
 import "../globals.css";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
+import { Analytics } from "@vercel/analytics/next";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ModeToggle } from "@/components/DarkModeToggle";
 import { DisableDraftMode } from "@/components/DisableDraftMode";
@@ -143,6 +144,8 @@ export default async function RootLayout({
             {/* Live content API */}
             <SanityLive />
           </ThemeProvider>
+
+          <Analytics />
 
           {(await draftMode()).isEnabled && (
             <>
